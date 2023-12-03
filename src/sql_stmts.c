@@ -5,7 +5,7 @@
 #include "../includes/sql_stmts.h"
 #include "../includes/database.h"
 
-SQL_TABLE* create_table(char tbname[STRLEN], size_t ncols)
+SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
 {
     SQL_TABLE* tb = malloc(sizeof(SQL_TABLE));
 
@@ -51,7 +51,7 @@ COLUMN* find_column_by_name(const DATABASE *db, const char* tbname, const char *
     return col_target;
 }
 
-void add_column(DATABASE* db, char tbname[STRLEN], char colname[STRLEN], DATATYPE dt, bool isPK)
+void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], DATATYPE dt, bool isPK)
 {
     SQL_TABLE* tb_target = find_table_by_name(db, tbname);
 
@@ -95,7 +95,7 @@ void add_column(DATABASE* db, char tbname[STRLEN], char colname[STRLEN], DATATYP
     db->table->tb_cols++;
 }
 
-void insert_into(DATABASE *db, char *tbname, char *colname, void *data)
+void insert_into(DATABASE *db, const char *tbname, const char *colname, void *data)
 {
     SQL_TABLE* tb = find_table_by_name(db, tbname);
     COLUMN* col = find_column_by_name(db, tbname, colname);
