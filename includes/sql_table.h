@@ -26,7 +26,7 @@ struct column {
     bool            is_PK;
     unsigned        PK;
     size_t          col_lines;
-    DATATYPE        typeof_table;
+    DATATYPE        typeof_column;
     COL_DATATYPE    data_type;
 };
 
