@@ -11,6 +11,7 @@ SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
 
     strcpy(tb->tb_name, tbname);
     tb->tb_cols = 0;
+    tb->has_PK = false;
     tb->column = malloc(ncols * sizeof(COLUMN));
 
     return tb;
@@ -108,8 +109,10 @@ void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRL
 
     switch (dt) {
         case INT:
-            if (isPK)
+            if (isPK) {
                 tb_target->column->is_PK = true;
+                tb_target->has_PK = true;
+            }
             
             tb_target->column->typeof_column = INT;
             tb_target->column->data_type.int_datatype = calloc(10, sizeof(int));
