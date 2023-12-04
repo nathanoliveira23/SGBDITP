@@ -121,7 +121,49 @@ void insert_into(DATABASE *db, const char *tbname, const char *colname, void *da
     }
 }
 
+void select_table(const DATABASE *db, const char *tbname)
+{
+    SQL_TABLE* table = find_table_by_name(db, tbname);
+
+    for (size_t i = 0; i < table->tb_cols; i++) {
+        printf("Coluna %s:\n", table->column[i].col_name);
+
+        for (size_t j = 0; j < 10; j++) {
+            switch (table->column[i].typeof_column) {
+                case INT:
+                    printf("%d ", table->column[i].data_type.int_datatype[j]);
+                    break;
+                case FLOAT:
+                    printf("%.2f ", table->column[i].data_type.float_datatype[j]);
+                    break;
+                case CHAR:
+                    printf("%c ", table->column[i].data_type.char_datatype[j]);
+                    break;
+                case STRING:
+                    printf("%s ", table->column[i].data_type.string_datatype[j]);
+                    break;
+                case BOOL:
+                    printf("%d ", table->column[i].data_type.bool_datatype[j]);
+                    break;
+            }
+        }
+    }
+}
+
 void select_all_tables(const DATABASE *db)
 {
+    printf("Tabelas existentes: ");
+    for (size_t i = 0; i < db->n_tables; i++)
+        printf("%s | ", db->table[i].tb_name);
 
+    putchar('\n');
+}
+
+void drop_table(const DATABASE *db, const char* tbname)
+{
+    unsigned index = 0;
+
+    for (size_t i = 0; i < db->n_tables; i++) {
+        SQL_TABLE* table = &(db->table[i].tb_name);   
+    }
 }

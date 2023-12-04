@@ -10,6 +10,8 @@ COLUMN* find_column_by_name(const DATABASE* db, const char* tbname, const char* 
 SQL_TABLE* create_table(const char tb_name[STRLEN], size_t ncols);
 void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], DATATYPE dt, bool isPK);
 void insert_into(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], void* data);
+void select_table(const DATABASE* db, const char* tbname);
 void select_all_tables(const DATABASE* db);
+void drop_table(const DATABASE* db, const char* tbname);
 
 #endif
