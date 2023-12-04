@@ -16,8 +16,47 @@ SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
     return tb;
 }
 
+bool exists_table(const DATABASE* db, const char* tbname)
+{
+    char* temp_name;
+    bool exists;
+
+    for (size_t i = 0; i < db->n_tables; i++) {
+        temp_name = db->table[i].tb_name;
+        exists = strcmp(temp_name, tbname) == 0;
+
+        if (exists)
+            return true;
+    }
+
+    return false;
+}
+
+bool exists_column(const DATABASE *db, const char *tbname, const char *colname)
+{
+    if (!exists_table(db, tbname))
+        return false;
+
+    SQL_TABLE* tb = find_table_by_name(db, tbname);
+    char* temp_col_name;
+    bool exists;
+
+    for (size_t i = 0; i < tb->tb_cols; i++) {
+        temp_col_name = tb->column[i].col_name;
+        exists = strcmp(temp_col_name, colname);
+
+        if (exists)
+            return true;
+    }
+
+    return false;
+}
+
 SQL_TABLE* find_table_by_name(const DATABASE* db, const char* tbname)
 {
+    if (!exists_table(db, tbname))
+        return NULL;
+
     SQL_TABLE* tb_target;
     bool found;
 
@@ -35,7 +74,14 @@ SQL_TABLE* find_table_by_name(const DATABASE* db, const char* tbname)
 
 COLUMN* find_column_by_name(const DATABASE *db, const char* tbname, const char *colname)
 {
+    if (!exists_table(db, tbname))
+        return NULL;
+
     SQL_TABLE* tb = find_table_by_name(db, tbname);
+
+    if (!exists_column(db, tb->tb_name, colname))
+        return NULL;
+
     COLUMN* col_target;
     bool found;
 
