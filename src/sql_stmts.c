@@ -159,11 +159,22 @@ void select_all_tables(const DATABASE *db)
     putchar('\n');
 }
 
-void drop_table(const DATABASE *db, const char* tbname)
+void drop_table(DATABASE *db, const char* tbname)
 {
+    SQL_TABLE* table = find_table_by_name(db, tbname);
     unsigned index = 0;
 
     for (size_t i = 0; i < db->n_tables; i++) {
-        SQL_TABLE* table = &(db->table[i].tb_name);   
+        const char* temp_tb_name = db->table[i].tb_name;
+
+        if (strcmp(table->tb_name, temp_tb_name) == 0) {
+            index = i;
+            break;
+        }
     }
+
+    for (size_t i = 0; i < db->n_tables; i++)
+        db->table[i] = db->table[i + 1];
+
+    db->n_tables -= 1;
 }

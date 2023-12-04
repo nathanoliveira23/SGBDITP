@@ -12,6 +12,6 @@ void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRL
 void insert_into(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], void* data);
 void select_table(const DATABASE* db, const char* tbname);
 void select_all_tables(const DATABASE* db);
-void drop_table(const DATABASE* db, const char* tbname);
+void drop_table(DATABASE* db, const char* tbname);
 
 #endif
