@@ -174,6 +174,9 @@ void select_table(const DATABASE *db, const char *tbname)
 {
     SQL_TABLE* table = find_table_by_name(db, tbname);
 
+    if (!exists_table(db, tbname))
+        return;
+
     for (size_t i = 0; i < table->tb_cols; i++) {
         printf("Coluna %s:\n", table->column[i].col_name);
 
@@ -210,6 +213,9 @@ void select_all_tables(const DATABASE *db)
 
 void drop_table(DATABASE *db, const char* tbname)
 {
+    if (!exists_table(db, tbname))
+        return;
+
     SQL_TABLE* table = find_table_by_name(db, tbname);
     unsigned index = 0;
 
