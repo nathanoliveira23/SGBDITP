@@ -5,7 +5,7 @@ CLANG = clang
 
 C_FLAGS = -std=c99 -Wall -Werror -Wextra -Wunnused -pedantic -lm
 
-C_SOURCES = $(PWD)/src/*.c
+C_SOURCES = $(PWD)/src/*.c $(PWD)/utils/*.c
 
 INCLUDE_PATH = -I/$(PWD)/includes
 
