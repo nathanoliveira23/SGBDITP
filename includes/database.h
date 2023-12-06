@@ -12,7 +12,7 @@ struct database {
     size_t      n_tables;
 };
 
-DATABASE* initialize(size_t storage);
-void add_table(DATABASE* db, SQL_TABLE* tb);
+DATABASE*   initialize(size_t storage);
+void        add_table(DATABASE* db, SQL_TABLE* tb);
 
 #endif
