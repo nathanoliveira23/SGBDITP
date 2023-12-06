@@ -4,6 +4,7 @@
 #include <string.h>
 #include "../includes/sql_stmts.h"
 #include "../includes/database.h"
+#include "../includes/sql_helpers.h"
 #include "../utils/tokenize.c"
 
 SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
@@ -18,116 +19,6 @@ SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
     return tb;
 }
 
-bool exists_table(const DATABASE* db, const char* tbname)
-{
-    char* temp_name;
-    bool exists;
-
-    for (size_t i = 0; i < db->n_tables; i++) {
-        temp_name = db->table[i].tb_name;
-        exists = strcmp(temp_name, tbname) == 0;
-
-        if (exists)
-            return true;
-    }
-
-    return false;
-}
-
-bool exists_column(const DATABASE *db, const char *tbname, const char *colname)
-{
-    if (!exists_table(db, tbname))
-        return false;
-
-    SQL_TABLE* tb = find_table_by_name(db, tbname);
-    char* temp_col_name;
-    bool exists;
-
-    for (size_t i = 0; i < tb->tb_cols; i++) {
-        temp_col_name = tb->column[i].col_name;
-        exists = strcmp(temp_col_name, colname);
-
-        if (exists)
-            return true;
-    }
-
-    return false;
-}
-
-SQL_TABLE* find_table_by_name(const DATABASE* db, const char* tbname)
-{
-    if (!exists_table(db, tbname))
-        return NULL;
-
-    SQL_TABLE* tb_target;
-    bool found;
-
-    for (size_t i = 0; i < db->n_tables; i++) {
-        found = strcmp(db->table[i].tb_name, tbname) == 0;
-
-        if (found) {
-            tb_target = &(db->table[i]);
-            break;
-        }
-    }
-
-    return tb_target;
-}
-
-COLUMN* find_column_by_name(const DATABASE *db, const char* tbname, const char *colname)
-{
-    if (!exists_table(db, tbname))
-        return NULL;
-
-    SQL_TABLE* tb = find_table_by_name(db, tbname);
-
-    if (!exists_column(db, tb->tb_name, colname))
-        return NULL;
-
-    COLUMN* col_target;
-    bool found;
-
-    for (size_t i = 0; i < tb->tb_cols; i++) {
-        found = strcmp(tb->column[i].col_name, colname) == 0;
-
-        if (found) {
-            col_target = &(tb->column[i]);
-            break;
-        }
-    }
-
-    return col_target;
-}
-
-COLUMN* get_column(const DATABASE* db, const char* tbname, const char* colname)
-{
-    if (!exists_table(db, tbname))
-        return NULL;
-
-    SQL_TABLE* table = find_table_by_name(db, tbname);
-    COLUMN* column;
-
-    if (!exists_column(db, table->tb_name, colname))
-        return NULL;
-
-    column = find_column_by_name(db, table->tb_name, colname);
-
-    return column;
-}
-
-COLUMN* get_all_columns(const DATABASE* db, const char* tbname)
-{
-    if (!exists_table(db, tbname))
-        return NULL;
-
-    SQL_TABLE* table = find_table_by_name(db, tbname);
-    COLUMN* columns = malloc(table->tb_cols * sizeof(COLUMN));
-
-    for (size_t i = 0; i < table->tb_cols; i++)
-        columns[i] = table->column[i];
-
-    return columns;
-}
 
 void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], DATATYPE dt, bool isPK)
 {
@@ -242,21 +133,6 @@ void select_all_tables(const DATABASE *db)
     putchar('\n');
 }
 
-void print_column_data(COLUMN* col, size_t index)
-{
-    DATATYPE col_datatype = col->typeof_column;
-
-    if (col_datatype == INT)
-        printf("%d\n", col->data_type.int_datatype[index]);
-    else if (col_datatype == FLOAT)
-        printf("%.2f\n", col->data_type.float_datatype[index]);
-    else if (col_datatype == CHAR)
-        printf("%c\n", col->data_type.char_datatype[index]);
-    else if (col_datatype == BOOL)
-        printf("%d\n", col->data_type.bool_datatype[index]);
-    else if (col_datatype == STRING)
-        printf("%s\n", col->data_type.string_datatype[index]);
-}
 
 void select_where(const DATABASE* db, const char* tbname, const char* colname, char* condition)
 {
