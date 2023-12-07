@@ -107,28 +107,12 @@ void select_table(const DATABASE *db, const char *tbname)
     if (!exists_table(db, tbname))
         return;
 
+    printf("%s\n", table->tname);
     for (size_t i = 0; i < table->ncols; i++) {
-        printf("Coluna %s:\n", table->column[i].cname);
+        printf("Coluna %s ", table->column[i].cname);
 
-        for (size_t j = 0; j < table->column->storage; j++) {
-            switch (table->column[i].typeof_column) {
-                case INT:
-                    printf("%d ", table->column[i].data_type.int_datatype[j]);
-                    break;
-                case FLOAT:
-                    printf("%.2f ", table->column[i].data_type.float_datatype[j]);
-                    break;
-                case CHAR:
-                    printf("%c ", table->column[i].data_type.char_datatype[j]);
-                    break;
-                case STRING:
-                    printf("%s ", table->column[i].data_type.string_datatype[j]);
-                    break;
-                case BOOL:
-                    printf("%d ", table->column[i].data_type.bool_datatype[j]);
-                    break;
-            }
-        }
+        for (size_t j = 0; j < table->column->storage; j++) 
+            print_column_data(&(table->column[i]), j);
     }
 }
 
