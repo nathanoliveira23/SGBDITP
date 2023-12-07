@@ -8,7 +8,7 @@
 #define STRLEN 50
 
 union col_datatype {
-    uint    *pk;
+    uint        *pk;
     char        *char_datatype;
     char        **string_datatype;
     int         *int_datatype;
