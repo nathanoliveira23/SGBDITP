@@ -317,6 +317,8 @@ void select_where(const DATABASE* db, const char* tbname, const char* colname, c
             }
             break;
     }
+
+    free_tokens(tokens, 2);
 }
 
 void drop_table(DATABASE *db, const char* tbname)
