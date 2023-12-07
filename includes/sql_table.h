@@ -3,18 +3,12 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include "types.h"
 
 #define STRLEN 50
 
-enum dt { INT, FLOAT, CHAR, STRING, BOOL };
-
-typedef enum dt             DATATYPE;
-typedef struct column       COLUMN;
-typedef union col_datatype  COL_DATATYPE;
-typedef struct table        SQL_TABLE;
-
 union col_datatype {
-    unsigned    *pk;
+    uint    *pk;
     char        *char_datatype;
     char        **string_datatype;
     int         *int_datatype;

@@ -34,7 +34,7 @@ void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRL
         target_table->has_PK = true;
         target_table->column->is_PK = true;
 
-        target_table->column->data_type.pk = calloc(target_table->column->storage, sizeof(unsigned int));
+        target_table->column->data_type.pk = calloc(target_table->column->storage, sizeof(uint));
     }
 
     switch (dt) {
@@ -75,7 +75,7 @@ void insert_into(DATABASE *db, const char *tbname, const char *colname, void *da
     COLUMN* col = find_column_by_name(db, tbname, colname);
 
     if (col->is_PK) {
-        col->data_type.pk[col->nlines++] = *(unsigned*) data;
+        col->data_type.pk[col->nlines++] = *(uint*) data;
         return;
     }
 
