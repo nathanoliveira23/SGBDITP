@@ -14,25 +14,26 @@ typedef union col_datatype  COL_DATATYPE;
 typedef struct table        SQL_TABLE;
 
 union col_datatype {
-    char    *char_datatype;
-    char    **string_datatype;
-    int     *int_datatype;
-    float   *float_datatype;
-    bool    *bool_datatype;
+    unsigned    *pk;
+    char        *char_datatype;
+    char        **string_datatype;
+    int         *int_datatype;
+    float       *float_datatype;
+    bool        *bool_datatype;
 };
 
 struct column {
-    char            col_name[STRLEN];
+    char            cname[STRLEN];
     bool            is_PK;
-    unsigned        PK;
-    size_t          col_lines;
+    size_t          nlines;
+    size_t          storage;
     DATATYPE        typeof_column;
     COL_DATATYPE    data_type;
 };
 
 struct table {
-    char    tb_name[STRLEN];
-    size_t  tb_cols;
+    char    tname[STRLEN];
+    size_t  ncols;
     bool    has_PK;
     COLUMN  *column;
 };

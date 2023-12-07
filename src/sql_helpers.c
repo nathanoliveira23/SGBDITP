@@ -11,7 +11,7 @@ bool exists_table(const DATABASE* db, const char* tbname)
     bool exists;
 
     for (size_t i = 0; i < db->n_tables; i++) {
-        temp_name = db->table[i].tb_name;
+        temp_name = db->table[i].tname;
         exists = strcmp(temp_name, tbname) == 0;
 
         if (exists)
@@ -30,8 +30,8 @@ bool exists_column(const DATABASE *db, const char *tbname, const char *colname)
     char* temp_col_name;
     bool exists;
 
-    for (size_t i = 0; i < tb->tb_cols; i++) {
-        temp_col_name = tb->column[i].col_name;
+    for (size_t i = 0; i < tb->ncols; i++) {
+        temp_col_name = tb->column[i].cname;
         exists = strcmp(temp_col_name, colname);
 
         if (exists)
@@ -50,7 +50,7 @@ SQL_TABLE* find_table_by_name(const DATABASE* db, const char* tbname)
     bool found;
 
     for (size_t i = 0; i < db->n_tables; i++) {
-        found = strcmp(db->table[i].tb_name, tbname) == 0;
+        found = strcmp(db->table[i].tname, tbname) == 0;
 
         if (found) {
             tb_target = &(db->table[i]);
@@ -68,14 +68,14 @@ COLUMN* find_column_by_name(const DATABASE *db, const char* tbname, const char *
 
     SQL_TABLE* tb = find_table_by_name(db, tbname);
 
-    if (!exists_column(db, tb->tb_name, colname))
+    if (!exists_column(db, tb->tname, colname))
         return NULL;
 
     COLUMN* col_target;
     bool found;
 
-    for (size_t i = 0; i < tb->tb_cols; i++) {
-        found = strcmp(tb->column[i].col_name, colname) == 0;
+    for (size_t i = 0; i < tb->ncols; i++) {
+        found = strcmp(tb->column[i].cname, colname) == 0;
 
         if (found) {
             col_target = &(tb->column[i]);
@@ -94,10 +94,10 @@ COLUMN* get_column(const DATABASE* db, const char* tbname, const char* colname)
     SQL_TABLE* table = find_table_by_name(db, tbname);
     COLUMN* column;
 
-    if (!exists_column(db, table->tb_name, colname))
+    if (!exists_column(db, table->tname, colname))
         return NULL;
 
-    column = find_column_by_name(db, table->tb_name, colname);
+    column = find_column_by_name(db, table->tname, colname);
 
     return column;
 }
@@ -108,9 +108,9 @@ COLUMN* get_all_columns(const DATABASE* db, const char* tbname)
         return NULL;
 
     SQL_TABLE* table = find_table_by_name(db, tbname);
-    COLUMN* columns = malloc(table->tb_cols * sizeof(COLUMN));
+    COLUMN* columns = malloc(table->ncols * sizeof(COLUMN));
 
-    for (size_t i = 0; i < table->tb_cols; i++)
+    for (size_t i = 0; i < table->ncols; i++)
         columns[i] = table->column[i];
 
     return columns;
