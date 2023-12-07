@@ -108,7 +108,11 @@ void select_table(const DATABASE *db, const char *tbname)
         return;
 
     printf("%s\n", table->tname);
+
     for (size_t i = 0; i < table->ncols; i++) {
+        if (table->column[i].is_PK)
+            strcat(table->column[i].cname, "*");
+
         printf("Coluna %s ", table->column[i].cname);
 
         for (size_t j = 0; j < table->column->storage; j++) 
@@ -119,8 +123,12 @@ void select_table(const DATABASE *db, const char *tbname)
 void select_all_tables(const DATABASE *db)
 {
     printf("Tabelas existentes: ");
-    for (size_t i = 0; i < db->n_tables; i++)
+    for (size_t i = 0; i < db->n_tables; i++) {
+        if (db->table[i].has_PK) 
+            strcat(db->table[i].tname,  "*");
+
         printf("%s | ", db->table[i].tname);
+    }
 
     putchar('\n');
 }
