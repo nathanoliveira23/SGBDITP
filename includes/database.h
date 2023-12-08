@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include <stddef.h>
+#include <stdbool.h>
 #include "sql_table.h"
 
 typedef struct database DATABASE;
@@ -13,6 +14,6 @@ struct database {
 };
 
 DATABASE*   initialize(size_t storage);
-void        add_table(DATABASE* db, SQL_TABLE* tb);
+bool        add_table(DATABASE* db, SQL_TABLE* tb);
 
 #endif

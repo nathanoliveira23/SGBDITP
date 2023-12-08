@@ -12,68 +12,77 @@ SQL_TABLE* create_table(const char *tbname, size_t ncols)
     SQL_TABLE* tb = malloc(sizeof(SQL_TABLE));
 
     strcpy(tb->tname, tbname);
-    tb->ncols = ncols;
+    tb->ncols = 0;
+    tb->cols_storage = ncols;
     tb->has_PK = false;
     tb->column = malloc(ncols * sizeof(COLUMN));
 
     return tb;
 }
 
-
-void add_column(DATABASE* db, const char *tbname, const char *colname, DATATYPE dt, bool isPK)
+COLUMN* create_column(const char* colname, DATATYPE type, bool isPK)
 {
-    SQL_TABLE* target_table = find_table_by_name(db, tbname);
-    size_t index = target_table->ncols;
+    COLUMN* new_column = malloc(sizeof(COLUMN));
 
-    strcpy(target_table->column[index].cname, colname);
+    strcpy(new_column->cname, colname);
 
-    target_table->column[index].is_PK = false;
-    target_table->column[index].nlines = 0;
-    target_table->column[index].storage = 10;
+    new_column->nlines = 0;
+    new_column->storage = 10;
+    new_column->is_PK = isPK;
 
-    if (isPK) {
-        target_table->has_PK = true;
-        target_table->column[index].is_PK = true;
-
-        target_table->column[index].data_type.pk = calloc(target_table->column[index].storage, sizeof(uint));
-    }
-
-    switch (dt) {
+    switch (type) {
         case INT:
-            target_table->column[index].typeof_column = INT;
-            target_table->column[index].data_type.int_datatype = calloc(target_table->column[index].storage, sizeof(int));
-
+            new_column->typeof_column = INT;
+            new_column->data_type.int_datatype = malloc(new_column->storage * sizeof(int));
             break;
         case FLOAT:
-            target_table->column[index].typeof_column = FLOAT; 
-            target_table->column[index].data_type.float_datatype = calloc(target_table->column[index].storage, sizeof(float));
+            new_column->typeof_column = FLOAT;
+            new_column->data_type.float_datatype = malloc(new_column->storage * sizeof(float));
             break;
         case CHAR:
-            target_table->column[index].typeof_column = CHAR;
-            target_table->column[index].data_type.char_datatype = calloc(target_table->column[index].storage, sizeof(char));
+            new_column->typeof_column = CHAR;
+            new_column->data_type.char_datatype = malloc(new_column->storage * sizeof(char));
             break;
         case STRING:
-            target_table->column[index].typeof_column = STRING;
-            target_table->column[index].data_type.string_datatype = malloc(target_table->column[index].storage * sizeof(char*));
+            new_column->typeof_column = STRING;
+            new_column->data_type.string_datatype = malloc(new_column->storage * sizeof(char*));
 
-            for (size_t i = 0; i < target_table->column[index].storage; i++)
-                target_table->column[index].data_type.string_datatype[i] = malloc(STRLEN * sizeof(char));
+            for (size_t i = 0; i < new_column->storage; i++)
+                new_column->data_type.string_datatype[i] = malloc(STRLEN * sizeof(char));
             break;
         case BOOL:
-            target_table->column[index].typeof_column = BOOL;
-            target_table->column[index].data_type.bool_datatype = calloc(target_table->column[index].storage, sizeof(bool));
+            new_column->typeof_column = BOOL;
+            new_column->data_type.bool_datatype = malloc(new_column->storage * sizeof(bool));
             break;
-        default:
-            puts("Unknown data type.");
     }
-    
-    target_table->ncols++;
+
+    return new_column;
+}
+
+void add_column(SQL_TABLE* table, COLUMN* col)
+{
+    size_t index = table->ncols;
+
+    table->column[index] = *col;
+    table->ncols++;
+}
+
+
+void insert_intoV2(COLUMN* col, void* data)
+{
+    DATATYPE type = col->typeof_column;
+
+    switch (type) {
+        case INT:
+            col->data_type.int_datatype[col->nlines++] = *(int*) data;
+            break;
+    }
 }
 
 void insert_into(DATABASE *db, const char *tbname, const char *colname, void *data)
 {
     SQL_TABLE* tb = find_table_by_name(db, tbname);
-    COLUMN* col = find_column_by_name(db, tbname, colname);
+    COLUMN* col = find_column_by_name(db, tb->tname, colname);
 
     if (col->is_PK) {
         col->data_type.pk[col->nlines++] = *(uint*) data;
@@ -116,7 +125,7 @@ void select_table(const DATABASE *db, const char *tbname)
 
         printf("Coluna %s ", table->column[i].cname);
 
-        for (size_t j = 0; j < table->column->storage; j++) 
+        for (size_t j = 0; j < table->column->nlines; j++) 
             print_column_data(&(table->column[i]), j);
     }
 }

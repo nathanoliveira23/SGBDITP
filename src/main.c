@@ -1,39 +1,57 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "../includes/database.h"
-#include "../includes/sql_stmts.h"
+#include "../includes/banner.h"
+#include "../includes//sql_mgmt.h"
+
+DATABASE* db;
 
 int main(void)
 {
-    DATABASE* db = initialize(10);
-    SQL_TABLE* tb;
+    system("clear");
+    db = initialize(10);
 
-    char title[STRLEN], colname[STRLEN];
-    int n, type, data;
-    char cdata;
-    char str[STRLEN];
-    float fdata;
+    int opt;
 
-    printf("Informe o nome e o numero de colunas da tabela: ");
-    scanf("%s %d", title, &n);
+    do {    
+        banner();
 
-    tb = create_table(title, n);
+        printf("O que deseja fazer?\n\n");
+        printf("\t[1] Criar uma tabela.\n");
+        printf("\t[2] Listar todas as tabelas existentes.\n");
+        printf("\t[3] Adicionar coluna(s) em uma tabela.\n");
+        printf("\t[4] Adicionar valores em uma tabela.\n");
+        printf("\t[5] Listar dados de uma tabela.\n");
+        printf("\t[6] Pesquisar valores em uma tabela.\n");
+        printf("\t[7] Remover uma tupla/linha de uma coluna.\n");
+        printf("\t[8] Remover uma tabela.\n");
+        printf("\t[0] Sair do menu\n\n\n");
+        printf(">>> Selecione sua opçao: ");
 
-    add_table(db, tb);
+        scanf("%d", &opt);
 
-    for (int i = 0; i < n; i++) {
-        printf("Informe o nome e o tipo dado da coluna %d: ", i+1);
-        scanf("%s %d", colname, &type);
-
-        add_column(db, title, colname, type, true);
+        switch (opt) {
+            case 1:
+                system("clear");
+                create_table_mgmt();
+                break;
+            case 2:
+                system("clear");
+                list_all_tables_mgmt();
+                break;
+            case 3:
+                system("clear");
+                create_column_mgmt();
+                break;
+            case 4:
+                system("clear");
+                list_all_table_data_mgmt();
+                break;
+            default:
+                printf("Opção invalida!");
+        }
     }
-
-    printf("Informe o nome da coluna e o dado que deseja inserir: ");
-    scanf("%s %d", colname, &data);
-
-    insert_into(db, title, colname, &data);
-
-    select_table(db, title);
+    while (opt != 0);
 
     return 0;
 }

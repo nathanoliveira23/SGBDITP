@@ -28,6 +28,7 @@ struct column {
 struct table {
     char    tname[STRLEN];
     size_t  ncols;
+    size_t  cols_storage;
     bool    has_PK;
     COLUMN  *column;
 };

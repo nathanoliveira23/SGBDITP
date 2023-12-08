@@ -12,13 +12,18 @@ DATABASE* initialize(size_t storage)
     return db;
 }
 
-void add_table(DATABASE* db, SQL_TABLE* tb)
+bool add_table(DATABASE* db, SQL_TABLE* tb)
 {
-    if (db->n_tables < db->storage)
+    if (db->n_tables < db->storage) {
         db->table[db->n_tables++] = *tb;
+        return true;
+    }
     else {
         db->storage *= 2;
         db->table = realloc(db->table, db->storage);
         db->table[db->n_tables++] = *tb;
+        return true;
     }
+
+    return false;
 }
