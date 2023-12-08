@@ -5,9 +5,9 @@
 #include "../includes/sql_stmts.h"
 #include "../includes/database.h"
 #include "../includes/sql_helpers.h"
-#include "../utils/tokenize.c"
+#include "../includes/tokenize.h"
 
-SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
+SQL_TABLE* create_table(const char *tbname, size_t ncols)
 {
     SQL_TABLE* tb = malloc(sizeof(SQL_TABLE));
 
@@ -20,47 +20,48 @@ SQL_TABLE* create_table(const char tbname[STRLEN], size_t ncols)
 }
 
 
-void add_column(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], DATATYPE dt, bool isPK)
+void add_column(DATABASE* db, const char *tbname, const char *colname, DATATYPE dt, bool isPK)
 {
     SQL_TABLE* target_table = find_table_by_name(db, tbname);
+    size_t index = target_table->ncols;
 
-    strcpy(target_table->column->cname, colname);
+    strcpy(target_table->column[index].cname, colname);
 
-    target_table->column->is_PK = false;
-    target_table->column->nlines = 0;
-    target_table->column->storage = 10;
+    target_table->column[index].is_PK = false;
+    target_table->column[index].nlines = 0;
+    target_table->column[index].storage = 10;
 
     if (isPK) {
         target_table->has_PK = true;
-        target_table->column->is_PK = true;
+        target_table->column[index].is_PK = true;
 
-        target_table->column->data_type.pk = calloc(target_table->column->storage, sizeof(uint));
+        target_table->column[index].data_type.pk = calloc(target_table->column[index].storage, sizeof(uint));
     }
 
     switch (dt) {
         case INT:
-            target_table->column->typeof_column = INT;
-            target_table->column->data_type.int_datatype = calloc(target_table->column->storage, sizeof(int));
+            target_table->column[index].typeof_column = INT;
+            target_table->column[index].data_type.int_datatype = calloc(target_table->column[index].storage, sizeof(int));
 
             break;
         case FLOAT:
-            target_table->column->typeof_column = FLOAT; 
-            target_table->column->data_type.float_datatype = calloc(target_table->column->storage, sizeof(float));
+            target_table->column[index].typeof_column = FLOAT; 
+            target_table->column[index].data_type.float_datatype = calloc(target_table->column[index].storage, sizeof(float));
             break;
         case CHAR:
-            target_table->column->typeof_column = CHAR;
-            target_table->column->data_type.char_datatype = calloc(target_table->column->storage, sizeof(char));
+            target_table->column[index].typeof_column = CHAR;
+            target_table->column[index].data_type.char_datatype = calloc(target_table->column[index].storage, sizeof(char));
             break;
         case STRING:
-            target_table->column->typeof_column = STRING;
-            target_table->column->data_type.string_datatype = calloc(target_table->column->storage, sizeof(char*));
+            target_table->column[index].typeof_column = STRING;
+            target_table->column[index].data_type.string_datatype = malloc(target_table->column[index].storage * sizeof(char*));
 
-            for (size_t i = 0; i < 10; i++)
-                target_table->column->data_type.string_datatype[i] = calloc(STRLEN, sizeof(char));
+            for (size_t i = 0; i < target_table->column[index].storage; i++)
+                target_table->column[index].data_type.string_datatype[i] = malloc(STRLEN * sizeof(char));
             break;
         case BOOL:
-            target_table->column->typeof_column = BOOL;
-            target_table->column->data_type.bool_datatype = calloc(target_table->column->storage, sizeof(bool));
+            target_table->column[index].typeof_column = BOOL;
+            target_table->column[index].data_type.bool_datatype = calloc(target_table->column[index].storage, sizeof(bool));
             break;
         default:
             puts("Unknown data type.");

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include "../includes/tokenize.h"
 
 char** tokenize(char* str)
 {
