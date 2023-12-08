@@ -10,7 +10,9 @@ int main(void)
 
     char title[STRLEN], colname[STRLEN];
     int n, type, data;
-    char cdata, str[STRLEN];
+    char cdata;
+    char str[STRLEN];
+    float fdata;
 
     printf("Informe o nome e o numero de colunas da tabela: ");
     scanf("%s %d", title, &n);
@@ -24,15 +26,13 @@ int main(void)
         scanf("%s %d", colname, &type);
 
         add_column(db, title, colname, type, true);
-
     }
 
-    printf("Informe o nome da coluna que deseja inserir dados e o dado correspondente: ");
-    scanf("%s %s", colname, str);
+    printf("Informe o nome da coluna e o dado que deseja inserir: ");
+    scanf("%s %d", colname, &data);
 
-    insert_into(db, title, colname, &str);
+    insert_into(db, title, colname, &data);
 
-    //select_all_tables(db);
     select_table(db, title);
 
     return 0;

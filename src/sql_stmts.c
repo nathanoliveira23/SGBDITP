@@ -12,7 +12,7 @@ SQL_TABLE* create_table(const char *tbname, size_t ncols)
     SQL_TABLE* tb = malloc(sizeof(SQL_TABLE));
 
     strcpy(tb->tname, tbname);
-    tb->ncols = 0;
+    tb->ncols = ncols;
     tb->has_PK = false;
     tb->column = malloc(ncols * sizeof(COLUMN));
 
@@ -91,7 +91,7 @@ void insert_into(DATABASE *db, const char *tbname, const char *colname, void *da
             col->data_type.char_datatype[col->nlines++] = *(char*) data;
             break;
         case STRING:
-            col->data_type.string_datatype[col->nlines++] = *(char**) data;
+            strcpy(col->data_type.string_datatype[col->nlines++], *(char**) data);
             break;
         case BOOL:
             col->data_type.bool_datatype[col->nlines++] = *(bool*) data;
