@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "../includes/sql_mgmt.h"
 #include "../includes/sql_stmts.h"
 #include "../includes/sql_helpers.h"
@@ -71,43 +72,40 @@ void create_column_mgmt()
         add_column(tb, col);
     }
 
-    all_columns = get_all_columns(db, tbname);
-
-    printf("A tabela %s possui as seguintes colunas: \n");
-    for (size_t i = 0; i < tb->ncols; i++) {
-        printf("%s | ", all_columns[i].cname);
-    }
-
-    printf("\n\n\n");
-                                                     
-    free(col);
-    free(tb);
-    free(all_columns);
+    printf("\n\n\n");                                                 
 }
 
 void list_all_table_data_mgmt(void)
 {
-    SQL_TABLE* tb;
     COLUMN* columns;
     char tbname[STRLEN];
 
     printf(">>> Informe o nome da tabela que deseja vizualizar: ");
     scanf("%s", tbname);
 
-    tb = find_table_by_name(db, tbname);
+    columns = get_all_columns(db, tbname);
 
-    if (tb == NULL)
-        printf("Tabela informada nao foi encontrada\n");
+    if (columns == NULL)
+        printf("Tabela nao encontrada.\n");
 
-    columns = get_all_columns(db, tb->tname);
-
-    printf(">>> A tabela %s possui as seguintes tabelas:\n");
-
-    for (size_t i = 0; i < tb->ncols; i++)
+    printf("As colunas sao: \n");
+    for (size_t i = 0; i < 2; i++) {
         printf("%s | ", columns[i].cname);
+    }
 
     printf("\n\n\n");
+}
 
-    free(tb);
-    free(columns); // array de colunas, REFATORAR!!!!
+void insert_into_mgmt()
+{
+    char tbname[STRLEN], colname[STRLEN];
+    int data;
+
+    printf(">>> Insira o nome da tabela: ");
+    scanf("%s", tbname);
+
+    printf(">>> Insira o nome da coluna e seu valor: ");
+    scanf("%s %d", colname, &data);
+
+    insert_into(db, tbname, colname, &data);
 }

@@ -20,17 +20,21 @@ int main(void)
         printf("\t[1] Criar uma tabela.\n");
         printf("\t[2] Listar todas as tabelas existentes.\n");
         printf("\t[3] Adicionar coluna(s) em uma tabela.\n");
-        printf("\t[4] Adicionar valores em uma tabela.\n");
-        printf("\t[5] Listar dados de uma tabela.\n");
-        printf("\t[6] Pesquisar valores em uma tabela.\n");
-        printf("\t[7] Remover uma tupla/linha de uma coluna.\n");
-        printf("\t[8] Remover uma tabela.\n");
+        printf("\t[4] Listar colunas de uma tabela.\n");
+        printf("\t[5] Adicionar valores em uma tabela.\n");
+        printf("\t[6] Listar dados de uma tabela.\n");
+        printf("\t[7] Pesquisar valores em uma tabela.\n");
+        printf("\t[8] Remover uma tupla/linha de uma coluna.\n");
+        printf("\t[9] Remover uma tabela.\n");
         printf("\t[0] Sair do menu\n\n\n");
         printf(">>> Selecione sua opçao: ");
 
         scanf("%d", &opt);
 
         switch (opt) {
+            case 0:
+                exit(0);
+                break;
             case 1:
                 system("clear");
                 create_table_mgmt();
@@ -46,6 +50,10 @@ int main(void)
             case 4:
                 system("clear");
                 list_all_table_data_mgmt();
+                break;
+            case 5:
+                system("clear");
+                insert_into_mgmt();
                 break;
             default:
                 printf("Opção invalida!");
