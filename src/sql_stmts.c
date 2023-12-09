@@ -2,59 +2,81 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 #include "../includes/sql_stmts.h"
 #include "../includes/database.h"
 #include "../includes/sql_helpers.h"
 #include "../includes/tokenize.h"
 
-SQL_TABLE* create_table(const char *tbname, const char* pkcol)
+SQL_TABLE* create_table(const char *tbname, size_t ncols, const char* pkname)
 {
     SQL_TABLE* tb = malloc(sizeof(SQL_TABLE));
 
     strcpy(tb->tname, tbname);
     tb->ncols = 0;
-    tb->cols_storage = 10;
-    tb->has_PK = false;
-    tb->column = malloc(tb->cols_storage * sizeof(COLUMN));
+    tb->cols_storage = ncols;
+    tb->column = malloc(ncols * sizeof(COLUMN));
+
+    COLUMN* PK_col = create_PK_column(pkname);
+
+    add_column(tb, PK_col);
 
     return tb;
 }
 
-COLUMN* create_column(const char* colname, DATATYPE type, bool isPK)
+COLUMN* create_PK_column(const char* pkname)
+{
+    COLUMN* pk = malloc(sizeof(COLUMN));
+
+    strcpy(pk->cname, pkname);
+    pk->is_PK = true;
+    pk->nlines = 0;
+    pk->storage = 10;
+    pk->typeof_column = PK;
+
+    //pk->data_type.data[PK] = (uint*) malloc(pk->storage * sizeof(uint));
+
+    return pk;
+}
+
+COLUMN* create_column(const char* colname, DATATYPE type)
 {
     COLUMN* new_column = malloc(sizeof(COLUMN));
+    char path[STRLEN];
+
+    strcpy(path, colname);
+    strcat(path, ".txt");
 
     strcpy(new_column->cname, colname);
 
     new_column->nlines = 0;
     new_column->storage = 10;
-    new_column->is_PK = isPK;
+    new_column->is_PK = false;
 
     switch (type) {
         case INT:
             new_column->typeof_column = INT;
-            new_column->data_type.int_datatype = malloc(new_column->storage * sizeof(int));
+            //new_column->data_type.data[INT] = malloc(new_column->storage * sizeof(int));
             break;
         case FLOAT:
             new_column->typeof_column = FLOAT;
-            new_column->data_type.float_datatype = malloc(new_column->storage * sizeof(float));
+            //new_column->data_type.data[FLOAT] = malloc(new_column->storage * sizeof(float));
             break;
         case CHAR:
             new_column->typeof_column = CHAR;
-            new_column->data_type.char_datatype = malloc(new_column->storage * sizeof(char));
+            //new_column->data_type.data[CHAR] = malloc(new_column->storage * sizeof(char));
             break;
         case STRING:
             new_column->typeof_column = STRING;
-            new_column->data_type.string_datatype = malloc(new_column->storage * sizeof(char*));
+            //new_column->data_type.str_data = malloc(new_column->storage * sizeof(char*));
 
-            for (size_t i = 0; i < new_column->storage; i++)
-                new_column->data_type.string_datatype[i] = malloc(STRLEN * sizeof(char));
-            break;
-        case BOOL:
-            new_column->typeof_column = BOOL;
-            new_column->data_type.bool_datatype = malloc(new_column->storage * sizeof(bool));
+            //for (size_t i = 0; i < new_column->storage; i++)
+                //new_column->data_type.str_data[i] = malloc(STRLEN * sizeof(char));
             break;
     }
+
+    new_column->data = fopen(path, "r");
+    fclose(new_column->data);            
 
     return new_column;
 }
@@ -67,18 +89,23 @@ void add_column(SQL_TABLE* table, COLUMN* col)
     table->ncols++;
 }
 
-
-void insert_intoV2(COLUMN* col, void* data)
+void insert_into(DATABASE* db, const char* tbname, const char* colname, void* data)
 {
-    DATATYPE type = col->typeof_column;
+    SQL_TABLE* tb = find_table_by_name(db, tbname);
+    COLUMN* col = find_column_by_name(db, tb->tname, colname);
 
-    switch (type) {
-        case INT:
-            col->data_type.int_datatype[col->nlines++] = *(int*) data;
-            break;
+    char path[STRLEN];
+    strcpy(path, colname);
+    strcat(path, colname);
+
+    if (col->is_PK) {
+        col->data = fopen(path, "w");
+        fprintf(col->data, "%d", *(int*) data);
+        fclose(col->data);
     }
 }
 
+/*
 void insert_into(DATABASE *db, const char *tbname, const char *colname, void *data)
 {
     SQL_TABLE* tb = find_table_by_name(db, tbname);
@@ -109,7 +136,8 @@ void insert_into(DATABASE *db, const char *tbname, const char *colname, void *da
             printf("Este tipo de dado e incompativel com a coluna %s.\n", col->cname);
     }
 }
-
+*/
+/*
 void select_table(const DATABASE *db, const char *tbname)
 {
     SQL_TABLE* table = find_table_by_name(db, tbname);
@@ -353,3 +381,4 @@ void drop_table(DATABASE *db, const char* tbname)
 
     db->n_tables -= 1;
 }
+*/

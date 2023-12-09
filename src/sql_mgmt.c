@@ -7,7 +7,7 @@
 #include "../includes/sql_helpers.h"
 
 extern DATABASE* db;
-
+/*
 void create_table_mgmt()
 {
     SQL_TABLE* tb;
@@ -109,3 +109,4 @@ void insert_into_mgmt()
 
     insert_into(db, tbname, colname, &data);
 }
+*/

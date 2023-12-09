@@ -4,8 +4,9 @@
 #include "database.h"
 #include "sql_table.h"
 
-SQL_TABLE*  create_table(const char tb_name[STRLEN], size_t ncols);
-COLUMN*     create_column(const char* colname, DATATYPE type, bool isPK);
+SQL_TABLE*  create_table(const char* tb_name, size_t ncols, const char* pkname);
+COLUMN*     create_PK_column(const char* pkname);
+COLUMN*     create_column(const char* colname, DATATYPE type);
 void        add_column(SQL_TABLE* table, COLUMN* col);
 void        insert_into(DATABASE* db, const char tbname[STRLEN], const char colname[STRLEN], void* data);
 void        select_table(const DATABASE* db, const char* tbname);

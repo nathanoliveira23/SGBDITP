@@ -1,6 +1,7 @@
 #ifndef SQL_TABLE_H
 #define SQL_TABLE_H
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include "types.h"
@@ -8,12 +9,8 @@
 #define STRLEN 50
 
 union col_datatype {
-    uint        *pk;
-    char        *char_datatype;
-    char        **string_datatype;
-    int         *int_datatype;
-    float       *float_datatype;
-    bool        *bool_datatype;
+    void**  data;
+    char**  str_data;
 };
 
 struct column {
@@ -22,14 +19,14 @@ struct column {
     size_t          nlines;
     size_t          storage;
     DATATYPE        typeof_column;
-    COL_DATATYPE    data_type;
+    FILE*           data;
+    //COL_DATATYPE    data_type;
 };
 
 struct table {
     char    tname[STRLEN];
     size_t  ncols;
     size_t  cols_storage;
-    bool    has_PK;
     COLUMN  *column;
 };
 

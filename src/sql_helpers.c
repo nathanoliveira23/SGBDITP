@@ -116,6 +116,7 @@ COLUMN* get_all_columns(const DATABASE* db, const char* tbname)
     return columns;
 }
 
+/*
 void print_column_data(COLUMN* col, size_t index)
 {
     DATATYPE col_datatype = col->typeof_column;
@@ -131,3 +132,4 @@ void print_column_data(COLUMN* col, size_t index)
     else if (col_datatype == STRING)
         printf("%s\n", col->data_type.string_datatype[index]);
 }
+*/

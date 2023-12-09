@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../includes/database.h"
+#include "../includes/sql_stmts.h"
 #include "../includes/banner.h"
 #include "../includes//sql_mgmt.h"
 
@@ -8,6 +9,23 @@ DATABASE* db;
 
 int main(void)
 {
+    SQL_TABLE* tb;
+    char tbname[STRLEN], pkname[STRLEN];
+    int ncols;
+    uint data;
+
+    printf("Informe o nome da tabela, a quantidade de colunas e o nome da coluna PK: ");
+    scanf("%s %d %s", tbname, &ncols, pkname);
+
+    tb = create_table(tbname, ncols, pkname);
+    
+    add_table(db, tb);
+
+    printf("Informe o nome da coluna e o valor que deseja inserir: ");
+    scanf("%s %d", pkname, &data);
+
+    insert_into(db, tbname, pkname, &data);
+    /*
     system("clear");
     db = initialize(10);
 
@@ -60,6 +78,6 @@ int main(void)
         }
     }
     while (opt != 0);
-
+    */
     return 0;
 }
