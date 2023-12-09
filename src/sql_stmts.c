@@ -7,15 +7,15 @@
 #include "../includes/sql_helpers.h"
 #include "../includes/tokenize.h"
 
-SQL_TABLE* create_table(const char *tbname, size_t ncols)
+SQL_TABLE* create_table(const char *tbname, const char* pkcol)
 {
     SQL_TABLE* tb = malloc(sizeof(SQL_TABLE));
 
     strcpy(tb->tname, tbname);
     tb->ncols = 0;
-    tb->cols_storage = ncols;
+    tb->cols_storage = 10;
     tb->has_PK = false;
-    tb->column = malloc(ncols * sizeof(COLUMN));
+    tb->column = malloc(tb->cols_storage * sizeof(COLUMN));
 
     return tb;
 }
