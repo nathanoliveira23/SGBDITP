@@ -177,8 +177,10 @@ void select_all_tables(const DATABASE* db)
 {
     if (db->n_tables == 0)
         return;
+
+    size_t ntables = db->n_tables;
     
-    for (size_t i = 0; i < db->n_tables; i++)
+    for (size_t i = 0; i < ntables; i++)
         draw_table_header(&db->table[i]);
 }
 

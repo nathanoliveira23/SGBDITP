@@ -25,10 +25,11 @@
 */
 bool exists_table(const DATABASE* db, const char* tbname)
 {
+    size_t ntables = db->n_tables;
     char* temp_name;
     bool exists;
 
-    for (size_t i = 0; i < db->n_tables; i++) {
+    for (size_t i = 0; i < ntables; i++) {
         temp_name = db->table[i].tname;
         exists = !strcmp(temp_name, tbname);
 
@@ -90,9 +91,10 @@ COLUMN* get_column(const DATABASE* db, const char* tbname, const char* colname)
         return NULL;
 
     SQL_TABLE* table = find_table_by_name(db, tbname);
+    size_t ncols = table->ncols;
     bool found;
 
-    for (size_t i = 0; i < table->ncols; i++) {
+    for (size_t i = 0; i < ncols; i++) {
         found = !strcmp(table->column[i].cname, colname);
 
         if (found)
