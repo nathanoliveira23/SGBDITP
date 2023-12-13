@@ -4,7 +4,7 @@
       no qual algumas de suas funcionalidade buscam se assemelhar a de um SGBD convecional.
 
     - O projeto pode ser encontrado no seguinte link do github: https://github.com/nathanoliveira23/SGBDITP
-    - Vídeo de apresentação do projeto: 
+    - Vídeo de apresentação do projeto: https://drive.google.com/file/d/1sHp7bZbBLtPE8dB7e02u_rtzZ4h802pW/view?usp=drive_link
 
 
 # O QUE FOI FEITO:
