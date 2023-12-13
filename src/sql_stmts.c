@@ -311,7 +311,7 @@ void select_where(const DATABASE* db, const char* tbname, char* condition)
             break;
     }
 
-    free_tokens(tokens, 3);
+    free_tokens(tokens);
 }
 
 
