@@ -16,6 +16,7 @@
 #include "../includes/sql_mgmt.h"
 #include "../includes/sql_stmts.h"
 #include "../includes/sql_helpers.h"
+#include "../includes/clear_screen.h"
 
 extern DATABASE* db;
 
@@ -40,6 +41,7 @@ void quit_session()
     exit = getchar();
 }
 
+
 /*
  * Esta função é responsável por receber as entradas do usuário
  * para criação de uma tabela SQL e tratar eventuais erros 
@@ -63,7 +65,7 @@ void create_table_mgmt()
     if (duplicated) {
         printf("Ja existe uma tabela com o mesmo nome no bando de dados!\n\n");
         quit_session();
-        system("clear");
+        clear_screen();
 
         return;
     }
@@ -104,7 +106,7 @@ void create_table_mgmt()
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }
 
 /*
@@ -130,7 +132,7 @@ void list_all_tables_mgmt()
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }
 
 
@@ -163,7 +165,7 @@ void insert_into_mgmt()
             if (verify_PK(table, to_insert.pk_data)) {
                 printf(">>> Esse valor ja foi definido com chave primaria.\n");
                 quit_session();
-                system("clear");
+                clear_screen();
 
                 return;
             }
@@ -209,7 +211,7 @@ void insert_into_mgmt()
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }
 
 /*
@@ -229,7 +231,7 @@ void list_table_data_mgmt(void)
     if (!exists_table(db, tbname)) {
         printf("Tabela informada não encontrada.");
         quit_session();
-        system("clear");
+        clear_screen();
         return;
     }
 
@@ -238,14 +240,14 @@ void list_table_data_mgmt(void)
     if (!success) {
         printf("Erro ao acessar a tabela.\n");
         quit_session();
-        system("clear");
+        clear_screen();
         return;
     }
 
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }
 
 /*
@@ -284,7 +286,7 @@ void select_where_mgmt(void)
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }
 
 /*
@@ -312,7 +314,7 @@ void delete_line_mgmt(void)
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }
 
 /*
@@ -335,5 +337,5 @@ void drop_table_mgmt()
     printf("\n\n\n");
 
     quit_session();
-    system("clear");
+    clear_screen();
 }

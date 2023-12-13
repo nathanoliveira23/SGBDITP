@@ -23,12 +23,13 @@
 #include "../includes/database.h"
 #include "../includes/banner.h"
 #include "../includes/sql_mgmt.h"
+#include "../includes/clear_screen.h"
 
 DATABASE* db;
 
 int main(void)
 {
-    system("clear");
+    clear_screen();
     db = initialize(10);
 
     int opt;
@@ -54,31 +55,31 @@ int main(void)
                 exit(0);
                 break;
             case 1:
-                system("clear");
+                clear_screen();
                 create_table_mgmt();
                 break;
             case 2:
-                system("clear");
+                clear_screen();
                 list_all_tables_mgmt();
                 break;
             case 3:
-                system("clear");
+                clear_screen();
                 insert_into_mgmt();
                 break;
             case 4:
-                system("clear");
+                clear_screen();
                 list_table_data_mgmt();
                 break;
             case 5:
-                system("clear");
+                clear_screen();
                 select_where_mgmt();
                 break;
             case 6:
-                system("clear");
+                clear_screen();
                 delete_line_mgmt();
                 break;
             case 7:
-                system("clear");
+                clear_screen();
                 drop_table_mgmt();
                 break;
             default:
