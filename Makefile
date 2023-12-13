@@ -1,7 +1,6 @@
 NAME = SGBDITP
 
 CC = gcc
-CLANG = clang
 
 C_FLAGS = -std=c99 -Wall -Werror -Wextra -Wunnused -pedantic -lm
 
